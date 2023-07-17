@@ -3,6 +3,7 @@ node_modules/
 src/config.js
 dumped-config.js
 scripts/*.js
+!scripts/dump-packet-fields.js
 !scripts/dump-replay-script.js
 !scripts/get-changeset-id.js
 !scripts/webserver.js
