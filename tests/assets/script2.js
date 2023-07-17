@@ -1,0 +1,2 @@
+/* global $ */
+$.scriptId = 'script2';

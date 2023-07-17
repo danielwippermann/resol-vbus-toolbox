@@ -1,0 +1,7 @@
+coverage/
+node_modules/
+src/config.js
+dumped-config.js
+scripts/*.js
+!scripts/get-changeset-id.js
+!scripts/webserver.js
