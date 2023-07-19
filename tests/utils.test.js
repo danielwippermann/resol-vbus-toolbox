@@ -278,11 +278,17 @@ describe('utils', () => {
                 'Y',
                 'm',
                 'd',
+                'H',
+                'M',
+                'S',
             ]);
 
             expect(tsc1.Y).toBe('2023');
             expect(tsc1.m).toBe('07');
             expect(tsc1.d).toBe('18');
+            expect(tsc1.H).toBe('15');
+            expect(tsc1.M).toBe('24');
+            expect(tsc1.S).toBe('10');
         });
 
         it('format() should work correctly', () => {

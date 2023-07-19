@@ -141,6 +141,9 @@ class Interval {
             Y: datecode.slice(0, 4),
             m: datecode.slice(5, 7),
             d: datecode.slice(8, 10),
+            H: datecode.slice(11, 13),
+            M: datecode.slice(14, 16),
+            S: datecode.slice(17, 19),
         };
     }
 
@@ -150,7 +153,10 @@ class Interval {
         return pattern
             .replaceAll('%Y', tsc.Y)
             .replaceAll('%m', tsc.m)
-            .replaceAll('%d', tsc.d);
+            .replaceAll('%d', tsc.d)
+            .replaceAll('%H', tsc.H)
+            .replaceAll('%M', tsc.M)
+            .replaceAll('%S', tsc.S);
     }
 
 }
