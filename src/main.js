@@ -12,6 +12,7 @@ const {
     Connection,
     Datagram,
     Header,
+    HeaderSet,
     Packet,
     SerialConnection,
     Specification,
@@ -58,6 +59,14 @@ async function main(args) {
     const ConnectionClass = connectionClassByName [config.connectionClassName];
     const connection = new ConnectionClass(config.connectionOptions);
 
+    const headerSet = new HeaderSet();
+
+    connection.on('packet', packet => {
+        headerSet.addHeader(packet);
+    });
+
+    const waitForSettledHeaderSetPromise = utils.waitForSettledHeaderSet(headerSet);
+
     const scriptManager = new ScriptManager(connection);
 
     const scripts = [];
@@ -100,6 +109,18 @@ async function main(args) {
 
         async delay(milliseconds) {
             await new Promise(resolve => setTimeout(resolve, milliseconds));
+        },
+
+        async waitForSettledHeaderSet() {
+            await waitForSettledHeaderSetPromise;
+        },
+
+        getSortedHeaderSet() {
+            return headerSet.getSortedHeaderSet();
+        },
+
+        getSortedPackets() {
+            return headerSet.getSortedHeaders();
         },
 
         send(data) {
