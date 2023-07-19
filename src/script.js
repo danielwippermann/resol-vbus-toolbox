@@ -8,7 +8,7 @@ function prepareScriptFunction(scriptFilename, rawScriptFunction) {
     } else if (typeof rawScriptFunction === 'string') {
         const wrappedScriptContents = `(function() { return async function($, require) {\n${rawScriptFunction}\n}; })();`;
 
-        scriptFunction = vm.runInNewContext(wrappedScriptContents, undefined, {
+        scriptFunction = vm.runInThisContext(wrappedScriptContents, undefined, {
             filename: scriptFilename,
             lineOffset: -1,
         });
