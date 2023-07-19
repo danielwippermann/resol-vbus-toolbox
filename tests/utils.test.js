@@ -248,7 +248,9 @@ describe('utils', () => {
         it('wait() should work correctly', async () => {
             const iv1 = new TestableInterval(100);
 
-            await iv1.wait();
+            const result1 = await iv1.wait();
+
+            expect(result1).toBe(true);
 
             expect(iv1.timestamp).toBe(100);
             expect(iv1.nowCallCount).toBe(2);

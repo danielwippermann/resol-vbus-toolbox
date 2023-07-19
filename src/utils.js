@@ -121,6 +121,8 @@ class Interval {
 
             await this.sleep(remaining);
         }
+
+        return true;
     }
 
     getTimestamp() {
