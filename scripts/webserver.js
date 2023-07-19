@@ -8,6 +8,9 @@ const os = require('os');
 const server = require('server');
 
 
+const { get } = server.router;
+const { status } = server.reply;
+
 const config = $.getScriptConfig('webserver', () => ({
 
     options: {
@@ -19,6 +22,46 @@ const config = $.getScriptConfig('webserver', () => ({
     routes: [],
 
 }));
+
+async function handleV1GetCurrentPackets(ctx) {
+    const packets = $.getSortedPackets();
+
+    const reply = {
+        timestamp: Date.now(),
+        packets: packets.map(packet => {
+            const packetSpec = $.specification.getPacketSpecification(packet);
+
+            const packetFields = $.specification.getPacketFieldsForHeaders([ packet ]);
+
+            return {
+                packetId: packetSpec.packetId,
+                timestamp: +packet.timestamp,
+                channel: packet.channel,
+                destinationAddress: packet.destinationAddress,
+                sourceAddress: packet.sourceAddress,
+                command: packet.command,
+                fullName: packetSpec.fullName,
+                fields: packetFields.map(pf => {
+                    return {
+                        id: pf.id,
+                        fieldId: pf.packetFieldSpec.fieldId,
+                        rawValue: pf.rawValue,
+                        textValue: pf.formatTextValue(false),
+                        name: pf.name,
+                        unitCode: pf.packetFieldSpec.type.unit.unitCode,
+                        unitText: pf.packetFieldSpec.type.unit.unitText,
+                    };
+                }),
+            };
+        }),
+    };
+
+    return status(200).json(reply);
+}
+
+config.routes.push([
+    get('/resol-vbus-toolbox/api/v1/get-current-packets', handleV1GetCurrentPackets),
+]);
 
 const service = $.registerService('webserver', {
 
@@ -32,7 +75,9 @@ const service = $.registerService('webserver', {
 
 await $.connect();
 
-const app = await server(service.options, $.utils.flatten(service.routes));
+const routes = $.utils.flatten(service.routes);
+
+const app = await server(service.options, routes);
 
 const port = app.options.port;
 
