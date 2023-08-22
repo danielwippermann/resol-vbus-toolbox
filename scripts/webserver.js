@@ -31,7 +31,7 @@ async function handleV1GetCurrentPackets(ctx) {
         packets: packets.map(packet => {
             const packetSpec = $.specification.getPacketSpecification(packet);
 
-            const packetFields = $.specification.getPacketFieldsForHeaders([ packet ]);
+            const packetFields = $.specification.getPacketFieldsForHeaders([ packet ]);
 
             return {
                 packetId: packetSpec.packetId,
@@ -40,6 +40,8 @@ async function handleV1GetCurrentPackets(ctx) {
                 destinationAddress: packet.destinationAddress,
                 sourceAddress: packet.sourceAddress,
                 command: packet.command,
+                frameCount: packet.frameCount,
+                frameData: packet.frameData.slice(0, packet.frameCount * 4).toString('base64'),
                 fullName: packetSpec.fullName,
                 fields: packetFields.map(pf => {
                     return {
@@ -60,7 +62,7 @@ async function handleV1GetCurrentPackets(ctx) {
 }
 
 config.routes.push([
-    get('/resol-vbus-toolbox/api/v1/get-current-packets', handleV1GetCurrentPackets),
+    get('/webserver/api/v1/get-current-packets', handleV1GetCurrentPackets),
 ]);
 
 const service = $.registerService('webserver', {
