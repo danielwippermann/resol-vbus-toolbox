@@ -295,6 +295,10 @@ describe('utils', () => {
             expect(result1).toBe(50);
 
             expect(iv1.timestamp).toBe(50);
+
+            const result2 = iv1.getTimestamp();
+
+            expect(result2).toBeGreaterThanOrEqual(50);
         });
 
         it('getDate() should work correctly', () => {
@@ -341,6 +345,16 @@ describe('utils', () => {
             expect(result1).toBe('log/20230718.csv');
         });
 
+    });
+
+    it('hasOwn() should work correctly', () => {
+        const o1 = {};
+        const o2 = { k1: 1 };
+
+        expect(utils.hasOwn(o1, 'k1')).toBe(false);
+        expect(utils.hasOwn(o2, 'k1')).toBe(true);
+        expect(utils.hasOwn(o2, 'k1')).toBe(true);
+        expect(utils.hasOwn(o2, 'toString')).toBe(false);
     });
 
 });
