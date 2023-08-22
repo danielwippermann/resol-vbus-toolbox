@@ -14,7 +14,10 @@ describe('utils', () => {
             'promisify',
             'iterateRange',
             'waitForSettledHeaderSet',
+            'getTimestampComponents',
+            'formatTimestamp',
             'Interval',
+            'hasOwn',
         ]);
     });
 
@@ -124,6 +127,32 @@ describe('utils', () => {
         await promise1;
     });
 
+    it('getTimestampComponents() should work correctly', () => {
+        const tsc1 = utils.getTimestampComponents(1689693850000);
+
+        expectOwnPropertyNamesToEqual(tsc1, [
+            'Y',
+            'm',
+            'd',
+            'H',
+            'M',
+            'S',
+        ]);
+
+        expect(tsc1.Y).toBe('2023');
+        expect(tsc1.m).toBe('07');
+        expect(tsc1.d).toBe('18');
+        expect(tsc1.H).toBe('15');
+        expect(tsc1.M).toBe('24');
+        expect(tsc1.S).toBe('10');
+    });
+
+    it('formatTimestamp() should work correctly', () => {
+        const result1 = utils.formatTimestamp(1689693850000, 'log/%Y%m%d.csv');
+
+        expect(result1).toBe('log/20230718.csv');
+    });
+
     describe('Interval', () => {
 
         const { Interval } = utils;
@@ -161,8 +190,9 @@ describe('utils', () => {
                 'update',
                 'wait',
                 'getTimestamp',
+                'getDate',
                 'getTimestampComponents',
-                'format',
+                'formatTimestamp',
             ]);
         });
 
@@ -267,6 +297,16 @@ describe('utils', () => {
             expect(iv1.timestamp).toBe(50);
         });
 
+        it('getDate() should work correctly', () => {
+            const iv1 = new TestableInterval(100);
+
+            const result1 = iv1.getDate();
+
+            expect(result1.toISOString()).toBe('1970-01-01T00:00:00.050Z');
+
+            expect(iv1.timestamp).toBe(50);
+        });
+
         it('getTimestampComponents() should work correctly', () => {
             const iv1 = new TestableInterval(100);
 
@@ -291,12 +331,12 @@ describe('utils', () => {
             expect(tsc1.S).toBe('10');
         });
 
-        it('format() should work correctly', () => {
+        it('formatTimestamp() should work correctly', () => {
             const iv1 = new TestableInterval(100);
 
             iv1.sleepSync(1689693850000);
 
-            const result1 = iv1.format('log/%Y%m%d.csv');
+            const result1 = iv1.formatTimestamp('log/%Y%m%d.csv');
 
             expect(result1).toBe('log/20230718.csv');
         });

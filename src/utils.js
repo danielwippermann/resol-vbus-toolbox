@@ -72,6 +72,31 @@ async function waitForSettledHeaderSet(headerSet) {
     });
 }
 
+function getTimestampComponents(timestamp) {
+    const datecode = new Date(timestamp).toISOString();
+
+    return {
+        Y: datecode.slice(0, 4),
+        m: datecode.slice(5, 7),
+        d: datecode.slice(8, 10),
+        H: datecode.slice(11, 13),
+        M: datecode.slice(14, 16),
+        S: datecode.slice(17, 19),
+    };
+}
+
+function formatTimestamp(timestamp, pattern) {
+    const tsc = getTimestampComponents(timestamp);
+
+    return pattern
+        .replaceAll('%Y', tsc.Y)
+        .replaceAll('%m', tsc.m)
+        .replaceAll('%d', tsc.d)
+        .replaceAll('%H', tsc.H)
+        .replaceAll('%M', tsc.M)
+        .replaceAll('%S', tsc.S);
+}
+
 class Interval {
 
     constructor(interval) {
@@ -132,33 +157,22 @@ class Interval {
         return this.timestamp;
     }
 
+    getDate() {
+        return new Date(this.getTimestamp());
+    }
+
     getTimestampComponents() {
-        const timestamp = this.getTimestamp();
-
-        const datecode = new Date(timestamp).toISOString();
-
-        return {
-            Y: datecode.slice(0, 4),
-            m: datecode.slice(5, 7),
-            d: datecode.slice(8, 10),
-            H: datecode.slice(11, 13),
-            M: datecode.slice(14, 16),
-            S: datecode.slice(17, 19),
-        };
+        return getTimestampComponents(this.getTimestamp());
     }
 
-    format(pattern) {
-        const tsc = this.getTimestampComponents();
-
-        return pattern
-            .replaceAll('%Y', tsc.Y)
-            .replaceAll('%m', tsc.m)
-            .replaceAll('%d', tsc.d)
-            .replaceAll('%H', tsc.H)
-            .replaceAll('%M', tsc.M)
-            .replaceAll('%S', tsc.S);
+    formatTimestamp(pattern) {
+        return formatTimestamp(this.getTimestamp(), pattern);
     }
 
+}
+
+function hasOwn(obj, propertyName) {
+    return Object.prototype.hasOwnProperty.call(obj, propertyName);
 }
 
 module.exports = {
@@ -166,5 +180,8 @@ module.exports = {
     promisify,
     iterateRange,
     waitForSettledHeaderSet,
+    getTimestampComponents,
+    formatTimestamp,
     Interval,
+    hasOwn,
 };
