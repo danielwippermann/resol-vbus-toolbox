@@ -5,7 +5,7 @@
   "license": "MIT",
   "scripts": {
     "lint": "eslint src tests",
-    "test": "jest"
+    "test": "jest -i"
   },
   "dependencies": {
     "resol-vbus": "^0.27.0",
