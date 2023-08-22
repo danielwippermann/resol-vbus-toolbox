@@ -83,8 +83,22 @@ async function main(args) {
         config,
 
         getScriptConfig(key, defaultConfigGenerator) {
-            console.log(defaultConfigGenerator.toString());
-            return defaultConfigGenerator();
+            // console.log(defaultConfigGenerator.toString());
+
+            const defaultConfig = defaultConfigGenerator();
+
+            let scriptConfig = config.scriptConfigMap [key];
+            if (scriptConfig == null) {
+                scriptConfig = config.scriptConfigMap [key] = { ...defaultConfig };
+            }
+
+            for (const key of Object.getOwnPropertyNames(defaultConfig)) {
+                if (!utils.hasOwn(scriptConfig, key)) {
+                    scriptConfig [key] = defaultConfig [key];
+                }
+            }
+
+            return scriptConfig;
         },
 
         vbus,
