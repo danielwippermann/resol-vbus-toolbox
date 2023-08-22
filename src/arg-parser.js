@@ -1,3 +1,5 @@
+const path = require('path');
+
 const baseConfig = require('./config');
 const { flatten } = require('./utils');
 
@@ -56,6 +58,13 @@ function parseArgs(args) {
         const arg = consume();
         if (arg === '--help') {
             usage();
+        } else if (arg === '--config') {
+            const relConfigFilename = consumeArg('Expected argument for --config');
+            const absConfigFilename = path.resolve(relConfigFilename);
+            const loadedConfig = require(absConfigFilename);
+            for (const key of Object.getOwnPropertyNames(loadedConfig)) {
+                config [key] = loadedConfig [key];
+            }
         } else if (arg === '--host') {
             const options = ensureConnectionClassName('TcpConnection');
             options.host = consumeArg('Expected argument for --host');
