@@ -207,6 +207,8 @@ async function main(args) {
 
             $: commonDollar,
 
+            connection,
+
         });
     }
 
