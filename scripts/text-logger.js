@@ -1,13 +1,17 @@
 const fs = require('fs/promises');
 const path = require('path');
 
-const config = $.getScriptConfig('textLogger', () => ({
+const config = $.getScriptConfig('text-logger', () => ({
 
     // The interval in milliseconds.
     interval: 10000,
 
     // The filename pattern.
     filenamePattern: 'log/text/%Y%m%d.csv',
+
+    columnSeparator: '\t',
+
+    lineSeparator: '\r\n',
 
     // The column title for the "Date / Time" column.
     dateTimeTitle: 'Date / Time',
@@ -31,7 +35,7 @@ const interval = new $.utils.Interval(config.interval);
 let lastTopologyId = null;
 
 while (await interval.wait()) {
-    const filename = interval.format(config.filenamePattern);
+    const filename = interval.formatTimestamp(config.filenamePattern);
 
     let file;
     try {
@@ -57,8 +61,8 @@ while (await interval.wait()) {
 
         const packetFields = $.specification.getPacketFieldsForHeaders(packets);
 
-        const colSep = config.columnSeparator || '\t';
-        const lineSep = config.lineSeparator || '\r\n';
+        const colSep = config.columnSeparator;
+        const lineSep = config.lineSeparator;
         const output = [];
 
         if (needsHeaders) {
