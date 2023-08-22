@@ -94,7 +94,7 @@ async function getData(options) {
     return Buffer.concat(outChunks);
 }
 
-const service = $.registerService('vbus-logger', {
+$.registerService('vbus-logger', {
 
     getData,
 

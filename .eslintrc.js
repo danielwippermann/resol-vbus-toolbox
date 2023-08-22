@@ -11,7 +11,7 @@ module.exports = {
   },
   "parser": null,
   "parserOptions": {
-    "ecmaVersion": 2018,
+    "ecmaVersion": 2022,
     "sourceType": "module",
     "ecmaFeatures": {
       "jsx": true
@@ -28,8 +28,12 @@ module.exports = {
     "env": {
       "jest": true,
     },
+  }, {
+    "files": [
+      "scripts/**/*.js",
+    ],
     "globals": {
-      "sinon": true,
+      "$": true,
     }
   }],
   "rules": {

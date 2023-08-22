@@ -70,7 +70,7 @@ function setupDiscoveryServer(discoveryServer) {
     discoveryServer.on('message', (msg, remote) => {
         // console.log('message', msg, remote);
 
-        let msgString = msg.toString('utf-8');
+        const msgString = msg.toString('utf-8');
         if (msgString === queryString) {
             discoveryServer.send(replyBuffer, remote.port, remote.address);
         }

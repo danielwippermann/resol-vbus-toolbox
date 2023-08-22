@@ -64,7 +64,7 @@ function updateRelais(relais, advanceTime) {
 
 function setEnabled(moduleNr, enabled) {
     if ((moduleNr < 1) || (moduleNr > 15)) {
-        throw new Error(`Module number out-of-bounds`);
+        throw new Error('Module number out-of-bounds');
     } else {
         state.modules [moduleNr - 1].enabled = !!enabled;
     }
@@ -72,9 +72,9 @@ function setEnabled(moduleNr, enabled) {
 
 function setSensorValue(moduleNr, sensorNr, value) {
     if ((moduleNr < 1) || (moduleNr > 15)) {
-        throw new Error(`Module number out-of-bounds`);
+        throw new Error('Module number out-of-bounds');
     } else if ((sensorNr < 1) || (sensorNr > 6)) {
-        throw new Error(`Sensor number out-of-bounds`);
+        throw new Error('Sensor number out-of-bounds');
     } else {
         state.modules [moduleNr - 1].sensors [sensorNr - 1].value = value;
     }
@@ -82,9 +82,9 @@ function setSensorValue(moduleNr, sensorNr, value) {
 
 function getRelais(moduleNr, relaisNr) {
     if ((moduleNr < 1) || (moduleNr > 15)) {
-        throw new Error(`Module number out-of-bounds`);
+        throw new Error('Module number out-of-bounds');
     } else if ((relaisNr < 1) || (relaisNr > 5)) {
-        throw new Error(`Relais number out-of-bounds`);
+        throw new Error('Relais number out-of-bounds');
     } else {
         return state.modules [moduleNr - 1].relais [relaisNr - 1];
     }
@@ -95,7 +95,7 @@ function getRelaisValue(moduleNr, relaisNr) {
     return relais.value;
 }
 
-const service = $.registerService('em-simulator', {
+$.registerService('em-simulator', {
 
     setEnabled,
 

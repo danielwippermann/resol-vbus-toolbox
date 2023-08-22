@@ -81,13 +81,13 @@ const routes = $.utils.flatten(service.routes);
 
 const app = await server(service.options, routes);
 
-const port = app.options.port;
+const { port } = app.options;
 
 $.log(`Webserver running on port ${port}...`);
 
 const addressesByInterface =  os.networkInterfaces();
-for (const interface of Object.keys(addressesByInterface)) {
-    const addresses = addressesByInterface [interface];
+for (const iface of Object.keys(addressesByInterface)) {
+    const addresses = addressesByInterface [iface];
     for (const address of addresses) {
         if (address.family === 'IPv4') {
             $.log(`- http://${address.address}:${port}/`);

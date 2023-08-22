@@ -1,7 +1,5 @@
 /// Reads the device- and version-dependent changeset ID from the controller.
 
-const { vbus, specification } = $;
-
 const conn = await $.connect();
 
 const dgram1 = await conn.waitForFreeBus();
@@ -18,12 +16,12 @@ if (dgram1) {
 
         $.log($.sprintf('Changeset ID: 0x%08X', changesetId));
     } else {
-        $.log(`Unable to get changeset ID`);
+        $.log('Unable to get changeset ID');
     }
 
     await conn.releaseBus(peerAddress);
 } else {
-    $.log(`Unable to get peer address`);
+    $.log('Unable to get peer address');
 }
 
 await $.disconnect();

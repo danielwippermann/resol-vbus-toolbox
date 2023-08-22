@@ -101,13 +101,12 @@ $.on('telegram', tgram => {
         Array.from($.utils.iterateRange(0, tgram.getFrameCount())).map(frameIndex => {
             const startOffset = frameIndex * 7;
             const endOffset = (frameIndex + 1) * 7;
-            return `        '${packet.frameData.slice(startOffset, endOffset).toString('hex')}',  // Frame ${frameIndex}, offset ${startOffset}..${endOffset - 1}`;
+            return `        '${tgram.frameData.slice(startOffset, endOffset).toString('hex')}',  // Frame ${frameIndex}, offset ${startOffset}..${endOffset - 1}`;
         }),
         '    ],',
         '}));',
         '',
-    ])
-
+    ]);
 });
 
 await $.connect();
