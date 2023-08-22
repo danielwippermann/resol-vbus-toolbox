@@ -1,24 +1,19 @@
-const headerSet = new $.vbus.HeaderSet();
-
-$.on('packet', packet => {
-    $.log(packet.getId(), headerSet.getHeaderCount());
-    headerSet.addHeader(packet);
-});
+$.log('Connecting...');
 
 await $.connect();
 
-$.log('Connected');
+$.log('Connected, waiting for header set to settle...');
 
-await $.utils.waitForSettledHeaderSet(headerSet);
+await $.waitForSettledHeaderSet();
 
-$.log('Disconnecting');
+$.log('Header set settled, disconnecting...');
 
 await $.disconnect();
 
 
 const output = [ 'List of packets and packet fields:' ];
 
-const packets = headerSet.getSortedHeaders();
+const packets = $.getSortedPackets();
 for (const packet of packets) {
     const packetSpec = $.specification.getPacketSpecification(packet);
 
