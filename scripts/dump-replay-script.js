@@ -37,7 +37,8 @@ function getDelayStatement() {
     const diff = (lastTimestamp != null) ? (now - lastTimestamp) : null;
     lastTimestamp = now;
 
-    return (diff != null) ? [ `await $.delay(${diff});`, '' ] : [];
+    const nowComment = `// ${new Date(now).toISOString()} / ${now}`;
+    return (diff != null) ? [ `await $.delay(${diff});`, '', nowComment ] : [ nowComment ];
 }
 
 $.on('packet', packet => {
