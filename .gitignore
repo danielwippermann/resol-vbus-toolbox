@@ -11,5 +11,6 @@ scripts/*.js
 !scripts/dump-replay-script.js
 !scripts/em-simulator.js
 !scripts/get-changeset-id.js
+!scripts/mqtt-publisher.js
 !scripts/text-logger.js
 !scripts/webserver.js
