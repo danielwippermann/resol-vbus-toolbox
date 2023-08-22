@@ -9,6 +9,7 @@ scripts/*.js
 !scripts/dump-packet-fields.js
 !scripts/dump-packet-ids.js
 !scripts/dump-replay-script.js
+!scripts/em-simulator.js
 !scripts/get-changeset-id.js
 !scripts/text-logger.js
 !scripts/webserver.js
