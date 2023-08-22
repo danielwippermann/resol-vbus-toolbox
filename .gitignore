@@ -13,4 +13,5 @@ scripts/*.js
 !scripts/get-changeset-id.js
 !scripts/mqtt-publisher.js
 !scripts/text-logger.js
+!scripts/vbus-logger.js
 !scripts/webserver.js
