@@ -1,7 +1,6 @@
 coverage/
 log/
 node_modules/
-src/config.js
 dumped-config.js
 scripts/*.js
 !scripts/discovery-client.js
