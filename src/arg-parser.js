@@ -9,11 +9,33 @@ function parseArgs(args) {
     let argIndex = 0;
 
     function usage(message) {
+        function row(left, right) {
+            return `  ${left.padEnd(24, ' ')} ${right}`;
+        }
+
         const fullMessage = flatten([
             message ? [ message, '' ] : [],
-            'USAGE: resol-vbus-toolbox ...',
+            'USAGE: resol-vbus-toolbox <... options ...>',
+            '',
+            'GENERAL OPTIONS:',
+            row('--help', 'Print this usage message'),
+            row('--config <FILENAME>', 'Load configuration from file'),
+            row('--vsf <FILENAME>', 'Load VBus specification from file'),
+            row('--script <FILENAME>', 'Load script from file (can be used more than once)'),
+            row('--repl', 'Start a Read-Eval-Print-Loop'),
+            '',
+            'TCP CONNECTION OPTIONS:',
+            row('--host <HOST>', 'IP address or host name to connect to'),
+            row('--port <PORT>', 'Port number to connect to (default: 7053)'),
+            row('--viaTag <VIATAG>', 'Via tag to connect to (only usable on VBus.net)'),
+            row('--password <PASSWORD>', 'Password used to authenticate'),
+            row('--channel <CHANNEL>', 'VBus channel to connect to'),
+            '',
+            'SERIAL PORT CONNECTION OPTIONS:',
+            row('--path <PATH>', 'Name of the serial port to connect to'),
             '',
         ]).join('\n');
+
         throw new UsageError(fullMessage);
     }
 
