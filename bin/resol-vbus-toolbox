@@ -1,8 +1,13 @@
 #!/usr/bin/env node
 
-const { main } = require('../src/main');
+const { UsageError, main } = require('../src/main');
 
 main(process.argv.slice(2)).then(null, err => {
-    console.error(err);
-    process.exit(1);
+    if (err instanceof UsageError) {
+        console.error(err.message);
+        process.exit(2);
+    } else {
+        console.error(err);
+        process.exit(1);
+    }
 });

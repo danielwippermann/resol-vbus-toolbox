@@ -3,7 +3,7 @@ const repl = require('repl');
 
 const vbus = require('resol-vbus');
 
-const { parseArgs } = require('./arg-parser');
+const { UsageError, parseArgs } = require('./arg-parser');
 const { ScriptManager } = require('./script-manager');
 const utils = require('./utils');
 
@@ -217,5 +217,6 @@ async function main(args) {
 
 
 module.exports = {
+    UsageError,
     main,
 };
