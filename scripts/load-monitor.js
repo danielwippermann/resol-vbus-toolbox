@@ -83,6 +83,8 @@ setInterval(() => {
 
     const line = ''.padStart(80, '\u2550');
 
+    const now = Date.now();
+
     const output = [
         `${esc}[2J${esc}[H${esc}[1m${line.slice(0, 41)} PACKETS ${line.slice(0, 40)}${esc}[0m`,
         '',
@@ -94,7 +96,10 @@ setInterval(() => {
             const lastInterval = `${packetInfo.lastInterval ?? ''}`;
             const count = `${packetInfo.packetCount}`;
             const bytes = `${packetInfo.byteCount}`;
-            return `${indicator} ${packetId.padEnd(24)} ${lastInterval.padStart(8)} ${count.padStart(8)} ${bytes.padStart(8)}`;
+            const currentInterval = now - packetInfo.lastTimestamp;
+            const isCurrent = packetInfo.lastInterval ? (currentInterval < packetInfo.lastInterval * 3) : true;
+            const color = isCurrent ? `${esc}[0;97m` : `${esc}[0;37m`;
+            return `${color}${indicator} ${packetId.padEnd(24)} ${lastInterval.padStart(8)} ${count.padStart(8)} ${bytes.padStart(8)}${esc}[0m`;
         }),
         '',
         '',
