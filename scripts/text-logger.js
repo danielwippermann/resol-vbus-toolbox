@@ -94,7 +94,7 @@ while (await interval.wait()) {
         }
 
         // Values line
-        output.push(interval.format(config.dateTimeFormat));
+        output.push(interval.formatTimestamp(config.dateTimeFormat));
 
         for (const packetField of packetFields) {
             output.push(colSep);
