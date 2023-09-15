@@ -178,6 +178,62 @@ async function main(args) {
             return new Telegram(options);
         },
 
+        async transceive(...args) {
+            return await connection.transceive(...args);
+        },
+
+        async waitForFreeBus(...args) {
+            return await connection.waitForFreeBus(...args);
+        },
+
+        async releaseBus(...args) {
+            return await connection.releaseBus(...args);
+        },
+
+        async getValueById(...args) {
+            return await connection.getValueById(...args);
+        },
+
+        async setValueById(...args) {
+            return await connection.setValueById(...args);
+        },
+
+        async getValueIdHashById(...args) {
+            return await connection.getValueIdHashById(...args);
+        },
+
+        async getValueIdByIdHash(...args) {
+            return await connection.getValueIdByIdHash(...args);
+        },
+
+        async getCaps1(...args) {
+            return await connection.getCaps1(...args);
+        },
+
+        async beginBulkValueTransaction(...args) {
+            return await connection.beginBulkValueTransaction(...args);
+        },
+
+        async commitBulkValueTransaction(...args) {
+            return await connection.commitBulkValueTransaction(...args);
+        },
+
+        async rollbackBulkValueTransaction(...args) {
+            return await connection.rollbackBulkValueTransaction(...args);
+        },
+
+        async setBulkValueById(...args) {
+            return await connection.setBulkValueById(...args);
+        },
+
+        async ping(...args) {
+            return await connection.ping(...args);
+        },
+
+        async getStorageActivity(...args) {
+            return await connection.getStorageActivity(...args);
+        },
+
     };
 
     const runScriptsPromise = scriptManager.run(commonDollar);
