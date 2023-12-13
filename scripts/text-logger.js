@@ -1,4 +1,5 @@
 const fs = require('fs/promises');
+const path = require('path');
 
 const config = $.getScriptConfig('text-logger', () => ({
 
@@ -35,6 +36,9 @@ let lastTopologyId = null;
 
 while (await interval.wait()) {
     const filename = interval.formatTimestamp(config.filenamePattern);
+
+    const dirname = path.dirname(filename);
+    await fs.mkdir(dirname, { recursive: true });
 
     let file;
     try {
