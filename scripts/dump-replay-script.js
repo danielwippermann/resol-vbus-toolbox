@@ -8,11 +8,6 @@ function print(...args) {
     process.stdout.write($.utils.flatten(args, '').join('\n'));
 }
 
-print([
-    'await $.connect();',
-    '',
-]);
-
 // let lastRawDataTimestamp = null;
 
 // $.on('rawData', chunk => {
@@ -110,3 +105,8 @@ $.on('telegram', tgram => {
 });
 
 await $.connect();
+
+print([
+    'await $.connect();',
+    '',
+]);
