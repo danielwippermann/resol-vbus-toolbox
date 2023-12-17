@@ -95,6 +95,12 @@ class ScriptManager extends EventEmitter {
         return service;
     }
 
+    getService(serviceId) {
+        const { service } = this.serviceMap.get(serviceId);
+
+        return service;
+    }
+
     async connect(script) {
         if (script.phase !== 'SETUP') {
             throw new Error(`Script "${script.scriptFilename}" tried connecting after setup`);

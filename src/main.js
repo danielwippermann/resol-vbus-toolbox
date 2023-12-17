@@ -265,6 +265,10 @@ async function main(args) {
 
             connection,
 
+            getService(serviceId) {
+                return scriptManager.getService(serviceId);
+            },
+
         });
     }
 
