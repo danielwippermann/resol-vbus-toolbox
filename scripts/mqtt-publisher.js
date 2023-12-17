@@ -5,6 +5,13 @@ const config = $.getScriptConfig('mqtt-publisher', () => ({
     // URL to connect to the MQTT broker.
     url: 'mqtt://127.0.0.1',
 
+    // Additional options used to create the MQTT client. See
+    // https://github.com/mqttjs/MQTT.js#client for details.
+    mqttClientOptions: {
+        // username: '...',
+        // password: '...',
+    },
+
     // Publish interval in milliseconds.
     interval: 10000,
 
@@ -28,7 +35,7 @@ const config = $.getScriptConfig('mqtt-publisher', () => ({
 
 }));
 
-const client = await mqtt.connectAsync(config.url);
+const client = await mqtt.connectAsync(config.url, config.mqttClientOptions);
 
 await $.connect();
 
