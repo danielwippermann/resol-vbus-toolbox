@@ -3,6 +3,7 @@ log/
 node_modules/
 dumped-config.js
 scripts/*.js
+!scripts/custom-controller-mx.js
 !scripts/discovery-client.js
 !scripts/discovery-service.js
 !scripts/dump-config-file.js
