@@ -5,6 +5,7 @@ dumped-config.js
 scripts/*.js
 !scripts/discovery-client.js
 !scripts/discovery-service.js
+!scripts/dump-config-file.js
 !scripts/dump-packet-fields.js
 !scripts/dump-packet-ids.js
 !scripts/dump-replay-script.js
