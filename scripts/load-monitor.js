@@ -45,6 +45,9 @@ await $.connect();
 
 const esc = '\x1b';
 
+// Clear screen once
+process.stdout.write(`${esc}[2J`);
+
 const activityIndicators = [
     ' ',
     '\u2581',
@@ -86,7 +89,7 @@ setInterval(() => {
     const now = Date.now();
 
     const output = [
-        `${esc}[2J${esc}[H${esc}[1m${line.slice(0, 41)} PACKETS ${line.slice(0, 40)}${esc}[0m`,
+        `${esc}[1;1H${esc}[0J${esc}[1m${line.slice(0, 41)} PACKETS ${line.slice(0, 40)}${esc}[0m`,
         '',
         '  ID                       INTERVAL    COUNT    BYTES',
         packets.map(packet => {
