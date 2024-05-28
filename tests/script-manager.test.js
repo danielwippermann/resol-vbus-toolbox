@@ -24,6 +24,7 @@ describe('script-manager', () => {
                 'registerScript',
                 'registerService',
                 'requireService',
+                'getService',
                 'connect',
                 'disconnect',
                 'run',
@@ -195,6 +196,34 @@ describe('script-manager', () => {
             await expect(sm.requireService(script1, 'otherServiceId')).rejects.toThrow('Script "script1.js" required service "otherServiceId" after connecting');
 
             await expect(sm.requireService(script2, 'unknownServiceId')).rejects.toThrow('Requiring the following services failed:\n- Script "script2.js", service "unknownServiceId"');
+        });
+
+        it('getService() should work correctly', async () => {
+            const sm = new ScriptManager();
+
+            const script1 = sm.registerScript('script1.js', () => {});
+            const serviceId1 = 'serviceId1';
+            const service1 = {};
+
+            const script2 = sm.registerScript('script2.js', () => {});
+            const serviceId2 = 'serviceId2';
+            const service2 = {};
+
+            sm.registerService(script1, serviceId1, service1);
+
+            const result1 = sm.getService(serviceId1);
+
+            expect(result1).toBe(service1);
+
+            const result2 = sm.getService(script1, serviceId2);
+
+            expect(result2).toBe(null);
+
+            script1.phase = 'DISCONNECTED';
+
+            expect(sm.getService('otherServiceId')).toBe(null);
+
+            expect(sm.getService('unknownServiceId')).toBe(null);
         });
 
         it('connect() should work correctly', async () => {

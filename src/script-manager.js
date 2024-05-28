@@ -96,7 +96,9 @@ class ScriptManager extends EventEmitter {
     }
 
     getService(serviceId) {
-        const { service } = this.serviceMap.get(serviceId);
+        const entry = this.serviceMap.get(serviceId);
+
+        const service = entry ? entry.service : null;
 
         return service;
     }

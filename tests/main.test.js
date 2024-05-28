@@ -6,6 +6,7 @@ describe('main', () => {
 
     it('should export correctly', () => {
         expectOwnPropertyNamesToEqual(mainModule, [
+            'UsageError',
             'main',
         ]);
     });
