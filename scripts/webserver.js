@@ -8,7 +8,7 @@ const os = require('os');
 const server = require('server');
 
 
-const { get } = server.router;
+const { get, socket } = server.router;
 const { status } = server.reply;
 
 const config = $.getScriptConfig('webserver', () => ({
@@ -16,6 +16,10 @@ const config = $.getScriptConfig('webserver', () => ({
     options: {
 
         security: false,
+
+        socket: {
+            path: '/websocket',
+        },
 
     },
 
@@ -61,9 +65,30 @@ async function handleV1GetCurrentPackets(ctx) {
     return status(200).json(reply);
 }
 
+const socketConnectHandlers = [];
+const socketMessageHandlers = [];
+
+async function handleWebsocketConnect(ctx) {
+    // console.log('connect', ctx);
+    for (const handler of socketConnectHandlers) {
+        handler(ctx);
+    }
+}
+
+async function handleWebsocketMessage(ctx) {
+    // console.log('message', ctx);
+    for (const handler of socketMessageHandlers) {
+        handler(ctx);
+    }
+}
+
 config.routes.push([
     get('/webserver/api/v1/get-current-packets', handleV1GetCurrentPackets),
+    socket('connect', handleWebsocketConnect),
+    socket('message', handleWebsocketMessage),
 ]);
+
+let app;
 
 const service = $.registerService('webserver', {
 
@@ -73,13 +98,25 @@ const service = $.registerService('webserver', {
 
     routes: config.routes,
 
+    onSocketConnect: (handler) => {
+        socketConnectHandlers.push(handler);
+    },
+
+    onSocketMessage: (handler) => {
+        socketMessageHandlers.push(handler);
+    },
+
+    socketEmit: (type, data) => {
+        app.io.emit(type, data);
+    },
+
 });
 
 await $.connect();
 
 const routes = $.utils.flatten(service.routes);
 
-const app = await server(service.options, routes);
+app = await server(service.options, routes);
 
 const { port } = app.options;
 
