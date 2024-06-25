@@ -23,6 +23,7 @@ describe('script-manager', () => {
                 'loadScript',
                 'registerScript',
                 'registerService',
+                '_checkDeadlockedScripts',
                 'requireService',
                 'getService',
                 'connect',
@@ -162,6 +163,57 @@ describe('script-manager', () => {
             }).toThrow('Script "script1.js" registered service "serviceId2" after connecting');
 
             sm.off('serviceRegistered', onServiceRegistered);
+        });
+
+        it('_checkDeadlockedScripts should work correctly', async () => {
+            const sm = new ScriptManager();
+
+            const script1 = sm.registerScript('script1.js', () => {});
+            const serviceId1 = 'serviceId1';
+            const service1 = {};
+
+            const script2 = sm.registerScript('script2.js', () => {});
+            const serviceId2 = 'serviceId2';
+            const service2 = {};
+
+            const script3 = sm.registerScript('script3.js', () => {});
+            const serviceId3 = 'serviceId3';
+            const service3 = {};
+
+            const script4 = sm.registerScript('script4.js', () => {});
+            const serviceId4 = 'serviceId4';
+            const service4 = {};
+
+            sm._checkDeadlockedScripts();
+
+            const promise1 = sm.requireService(script2, serviceId1);
+            const promise2 = sm.requireService(script3, serviceId4);
+            sm.registerService(script4, serviceId4, service4);
+            const promise3 = sm.connect(script4);
+
+            expect(script1.phase).toBe('SETUP');
+            expect(script2.phase).toBe('REQUIRING');
+            expect(script3.phase).toBe('REQUIRING');
+            expect(script4.phase).toBe('CONNECTING');
+
+            sm._checkDeadlockedScripts();
+
+            await promise2;
+
+            const promise4 = sm.connect(script1);
+
+            expect(script1.phase).toBe('CONNECTING');
+            expect(script2.phase).toBe('REQUIRING');
+            expect(script3.phase).toBe('SETUP');
+            expect(script4.phase).toBe('CONNECTING');
+
+            await expect(async () => {
+                await sm.connect(script3);
+            }).rejects.toThrow('Requiring the following services failed:\n- Script "script2.js", service "serviceId1"');
+
+            expect(() => {
+                sm._checkDeadlockedScripts();
+            }).toThrow('Requiring the following services failed:\n- Script "script2.js", service "serviceId1"');
         });
 
         it('requireService() should work correctly', async () => {

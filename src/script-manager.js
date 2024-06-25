@@ -64,6 +64,43 @@ class ScriptManager extends EventEmitter {
         return service;
     }
 
+    _checkDeadlockedScripts() {
+        let maxPhasePrio = 0;
+        for (const script of this.scripts) {
+            let phasePrio = 1;
+            switch (script.phase) {
+            case 'SETUP':
+                phasePrio = 5;
+                break;
+            case 'REQUIRING':
+                if (this.serviceMap.has(script.phaseInfo.serviceId)) {
+                    phasePrio = 4;
+                } else {
+                    phasePrio = 3;
+                }
+                break;
+            case 'CONNECTING':
+                phasePrio = 2;
+                break;
+            }
+            if (maxPhasePrio < phasePrio) {
+                maxPhasePrio = phasePrio;
+            }
+        }
+
+        if (maxPhasePrio === 3) {
+            // NOTE(daniel): all scripts are either requiring an unregistered service
+            // or are already connecting, hence there will be no script will be registering
+            // that service anymore
+
+            const info = this.scripts.filter(script => script.phase === 'REQUIRING').map(script => {
+                return `- Script "${script.scriptFilename}", service "${script.phaseInfo.serviceId}"`;
+            }).join('\n');
+
+            throw new Error(`Requiring the following services failed:\n${info}`);
+        }
+    }
+
     async requireService(script, serviceId) {
         if (script.phase !== 'SETUP') {
             throw new Error(`Script "${script.scriptFilename}" required service "${serviceId}" after connecting`);
@@ -75,14 +112,7 @@ class ScriptManager extends EventEmitter {
                 serviceId,
             };
 
-            const anyScriptSettingUp = this.scripts.some(script => script.phase === 'SETUP');
-            if (!anyScriptSettingUp) {
-                const info = this.scripts.filter(script => script.phase === 'REQUIRING').map(script => {
-                    return `- Script "${script.scriptFilename}", service "${script.phaseInfo.serviceId}"`;
-                }).join('\n');
-
-                throw new Error(`Requiring the following services failed:\n${info}`);
-            }
+            this._checkDeadlockedScripts();
 
             await this.notifyEvent('serviceRegistered', ev => ev.serviceId === serviceId);
 
@@ -111,6 +141,8 @@ class ScriptManager extends EventEmitter {
         const onConnectedPromise = this.notifyEvent('connected', () => true);
 
         script.phase = 'CONNECTING';
+
+        this._checkDeadlockedScripts();
 
         const allScriptsConnecting = this.scripts.every(script => script.phase === 'CONNECTING');
 
