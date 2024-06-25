@@ -189,9 +189,7 @@ class ScriptManager extends EventEmitter {
             scriptPromises.push(promise);
         }
 
-        for (const promise of scriptPromises) {
-            await promise;
-        }
+        await Promise.all(scriptPromises);
 
         await onDisconnectedPromise;
     }
