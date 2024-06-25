@@ -36,6 +36,15 @@ function getDelayStatement() {
     return (diff != null) ? [ `await $.delay(${diff});`, '', nowComment ] : [ nowComment ];
 }
 
+$.on('junkData', buffer => {
+    print([
+        getDelayStatement(),
+        '// JUNK',
+        `await $.send(Buffer.from('${buffer.toString('hex')}', 'hex'));`,
+        '',
+    ]);
+});
+
 $.on('packet', packet => {
     const packetSpec = $.specification.getPacketSpecification(packet);
 
