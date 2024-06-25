@@ -88,8 +88,6 @@ config.routes.push([
     socket('message', handleWebsocketMessage),
 ]);
 
-let app;
-
 const service = $.registerService('webserver', {
 
     server,
@@ -116,7 +114,7 @@ await $.connect();
 
 const routes = $.utils.flatten(service.routes);
 
-app = await server(service.options, routes);
+const app = await server(service.options, routes);
 
 const { port } = app.options;
 

@@ -170,15 +170,10 @@ describe('script-manager', () => {
 
             const script1 = sm.registerScript('script1.js', () => {});
             const serviceId1 = 'serviceId1';
-            const service1 = {};
 
             const script2 = sm.registerScript('script2.js', () => {});
-            const serviceId2 = 'serviceId2';
-            const service2 = {};
 
             const script3 = sm.registerScript('script3.js', () => {});
-            const serviceId3 = 'serviceId3';
-            const service3 = {};
 
             const script4 = sm.registerScript('script4.js', () => {});
             const serviceId4 = 'serviceId4';
@@ -186,10 +181,10 @@ describe('script-manager', () => {
 
             sm._checkDeadlockedScripts();
 
-            const promise1 = sm.requireService(script2, serviceId1);
-            const promise2 = sm.requireService(script3, serviceId4);
+            sm.requireService(script2, serviceId1);
+            const promise1 = sm.requireService(script3, serviceId4);
             sm.registerService(script4, serviceId4, service4);
-            const promise3 = sm.connect(script4);
+            sm.connect(script4);
 
             expect(script1.phase).toBe('SETUP');
             expect(script2.phase).toBe('REQUIRING');
@@ -198,9 +193,9 @@ describe('script-manager', () => {
 
             sm._checkDeadlockedScripts();
 
-            await promise2;
+            await promise1;
 
-            const promise4 = sm.connect(script1);
+            sm.connect(script1);
 
             expect(script1.phase).toBe('CONNECTING');
             expect(script2.phase).toBe('REQUIRING');
@@ -257,9 +252,8 @@ describe('script-manager', () => {
             const serviceId1 = 'serviceId1';
             const service1 = {};
 
-            const script2 = sm.registerScript('script2.js', () => {});
+            sm.registerScript('script2.js', () => {});
             const serviceId2 = 'serviceId2';
-            const service2 = {};
 
             sm.registerService(script1, serviceId1, service1);
 
