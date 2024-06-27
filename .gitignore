@@ -15,5 +15,6 @@ scripts/*.js
 !scripts/load-monitor.js
 !scripts/mqtt-publisher.js
 !scripts/text-logger.js
+!scripts/timing-analyzer.js
 !scripts/vbus-logger.js
 !scripts/webserver.js
