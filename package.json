@@ -8,7 +8,7 @@
     "test": "jest -i"
   },
   "dependencies": {
-    "mqtt": "^5.7.0",
+    "mqtt": "^5.8.0",
     "resol-vbus": "^0.29.0",
     "server": "^1.0.39"
   },
