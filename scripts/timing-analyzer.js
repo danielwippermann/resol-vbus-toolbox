@@ -17,7 +17,9 @@ const headerSet = new HeaderSet();
 
 function getItemColorById(id) {
     let color;
-    if (/^.._...._...._20_0500_0000_00000000$/.test(id)) {
+    if (id === 'junk') {
+        color = '#aaa';
+    } else if (/^.._...._...._20_0500_0000_00000000$/.test(id)) {
         color = '#f00';
     } else if (/^.._...._...._20_0600_0000_00000000$/.test(id)) {
         color = '#0f0';
@@ -81,8 +83,6 @@ function commitChunk() {
 function commitSegment() {
     commitChunk();
 
-    console.log(currentSegment);
-
     let segment;
     if (currentSegment != null) {
         segment = currentSegment;
@@ -143,7 +143,8 @@ function emitItem(id, segment, options = {}) {
 const connection = new Connection();
 
 connection.on('junkData', junkData => {
-    // FIXME(daniel): emit item
+    const segment = commitSegment();
+    emitItem('junk', segment);
 });
 
 connection.on('packet', packet => {
