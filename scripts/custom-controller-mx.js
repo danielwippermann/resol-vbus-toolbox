@@ -111,10 +111,10 @@ function runCustomLogic() {
 
     // ... and so on ...
 
-    //-------------------------------------------------
+    // -------------------------------------------------
     // Example for a time-related function using a FSM
     // without using `async` or `await $.delay(...)`
-    //-------------------------------------------------
+    // -------------------------------------------------
 
     // Initialize FSM during first run
     if (values.exampleFsm == null) {
